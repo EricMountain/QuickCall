@@ -29,6 +29,8 @@ import android.widget.Spinner;
 
 // http://www.mkyong.com/android/how-to-make-a-phone-call-in-android/
 
+// todo store time at which last call was placed, and use this to avoid call loop, but restart activity on end of call, and apply auto-dial whnever activity resumes, not only onCreate().
+
 public class MainActivity extends Activity {
 
 	private static final String TAG = "QuickCall";
