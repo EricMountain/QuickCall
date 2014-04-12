@@ -12,8 +12,47 @@
         android:id="@+id/callButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/autoCutoutSpinner"
         android:text="@string/make_call" />
+
+    <Button
+        android:id="@+id/contactSelectButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/phoneNumber" />
+
+    <CheckBox
+        android:id="@+id/autoDialCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/contactSelectButton"
+        android:layout_alignRight="@+id/phoneNbEditText"
+        android:layout_below="@+id/contactSelectButton"
+        android:text="@string/auto_call" />
+
+    <EditText
+        android:id="@+id/phoneNbEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/contactSelectButton"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/contactSelectButton"
+        android:layout_toRightOf="@+id/contactSelectButton"
+        android:ems="10"
+        android:inputType="phone" />
+
+    <Spinner
+        android:id="@+id/autoCutoutSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/autoDialCheckBox"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/autoDialCheckBox"
+        android:entries="@array/auto_cutout_array" />
 
 </RelativeLayout>

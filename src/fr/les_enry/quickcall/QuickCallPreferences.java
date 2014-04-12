@@ -11,6 +11,6 @@ public interface QuickCallPreferences {
 	/** Phone number to call. */
 	static final String PHONE_NB = "PHONE_NB";
 	
-	/** Call in progress. */
-//	static final String CALL_IN_PROGRESS ="CALL_IN_PROGRESS"; 
+	/** Time after which to cutout the call automatically (offset into the array of strings). */
+	static final String AUTO_CUTOUT_TIMEOUT_OFFSET = "AUTO_CUTOUT_TIMEOUT_OFFSET"; 
 }

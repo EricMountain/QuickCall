@@ -34,6 +34,14 @@ public class QuickCallPreferencesUtil implements QuickCallPreferences {
 		sharedPrefs.edit().putBoolean(AUTO_CALL, enabled).apply();
 	}
 	
+	int getAutoCutoutTimeoutOffset() {
+		return sharedPrefs.getInt(AUTO_CUTOUT_TIMEOUT_OFFSET, 0);
+	}
+	
+	void atomicPutAutoCutoutTimeoutOffset(int autoCutoutOffset) {
+		sharedPrefs.edit().putInt(AUTO_CUTOUT_TIMEOUT_OFFSET, autoCutoutOffset).apply();
+	}
+	
 //	boolean getCallInProgress() {
 //		return sharedPrefs.getBoolean(CALL_IN_PROGRESS, false);
 //	}
