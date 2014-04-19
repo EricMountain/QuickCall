@@ -1,6 +1,7 @@
 package fr.les_enry.quickcall;
 
 import java.lang.reflect.Method;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -44,10 +45,10 @@ public class MainActivity extends Activity {
 
 	private Timer autoDialTimer = null;
 	private Timer autoCutoutTimer = null;
-	
+
 	/** Needs to be in synch with string resource auto_cutout_array */
-	private int autoCutoutTimeouts[] = {0, 5, 10, 15, 20, 30, 40, 50};
-	
+	private int autoCutoutTimeouts[] = { 0, 5, 10, 15, 20, 30, 40, 50 };
+
 	private int autoCutoutTimeoutOffset = 0;
 
 	@Override
@@ -57,7 +58,7 @@ public class MainActivity extends Activity {
 
 		quickCallPrefs = new QuickCallPreferencesUtil(this);
 
-		final CheckBox autoDialCheckBox = (CheckBox) findViewById(R.id.autoDialCheckBox);
+		CheckBox autoDialCheckBox = (CheckBox) findViewById(R.id.autoDialCheckBox);
 		autoDialCheckBox.setChecked(quickCallPrefs.getAutoCall());
 		autoDialCheckBox.setOnClickListener(new OnClickListener() {
 			@Override
@@ -67,7 +68,6 @@ public class MainActivity extends Activity {
 				quickCallPrefs.atomicPutAutoCall(cb.isChecked());
 			}
 		});
-
 
 		EditText phoneNbEditText = (EditText) findViewById(R.id.phoneNbEditText);
 		phoneNbEditText.setText(quickCallPrefs.getPhoneNb());
@@ -98,7 +98,7 @@ public class MainActivity extends Activity {
 				handleContactSelectButtonClick(v);
 			}
 		});
-		
+
 		Spinner spinner = (Spinner) findViewById(R.id.autoCutoutSpinner);
 		autoCutoutTimeoutOffset = quickCallPrefs.getAutoCutoutTimeoutOffset();
 		spinner.setSelection(autoCutoutTimeoutOffset);
@@ -108,7 +108,8 @@ public class MainActivity extends Activity {
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int pos, long id) {
 				autoCutoutTimeoutOffset = pos;
-				quickCallPrefs.atomicPutAutoCutoutTimeoutOffset(autoCutoutTimeoutOffset);
+				quickCallPrefs
+						.atomicPutAutoCutoutTimeoutOffset(autoCutoutTimeoutOffset);
 			}
 
 			@Override
@@ -116,9 +117,9 @@ public class MainActivity extends Activity {
 				// Don't change selection
 			}
 		});
-		
+
 		// Auto start call?
-		if (quickCallPrefs.getAutoCall()) {
+		if (autoDialCheckBox.isChecked()) {
 			autoDialTimer = new Timer();
 			TimerTask task = new TimerTask() {
 
@@ -127,9 +128,7 @@ public class MainActivity extends Activity {
 					runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
-							if (autoDialCheckBox.isChecked()) {
-								handleCallButtonClick(null);
-							}
+							makeCallAuto();
 						}
 					});
 				}
@@ -146,11 +145,40 @@ public class MainActivity extends Activity {
 	}
 
 	/**
-	 * Starts a call.
+	 * Handles user tapping the make-call button.
 	 * 
 	 * @param view
 	 */
 	void handleCallButtonClick(View view) {
+		makeCall();
+	}
+
+	/**
+	 * Called to make a call automatically. Checks time last call was made and
+	 * whether the auto dial checkbox is still checked.
+	 * 
+	 */
+	void makeCallAuto() {
+		CheckBox autoDialCheckBox = (CheckBox) findViewById(R.id.autoDialCheckBox);
+		if (!autoDialCheckBox.isChecked()) {
+			return;
+		}
+
+		// Check time of last call
+		Date lastCall = quickCallPrefs.getLastCallTime();
+		Date now = new Date();
+		long delay = quickCallPrefs.getAutoRedialDelayMs();
+		if ((lastCall == null) || (now.getTime() - lastCall.getTime() > delay)) {
+			makeCall();
+		}
+	}
+
+	/**
+	 * Launches dialer.
+	 */
+	void makeCall() {
+		quickCallPrefs.atomicPutLastCallTime(new Date());
+
 		TelephonyManager telephonyManager = (TelephonyManager) this
 				.getSystemService(Context.TELEPHONY_SERVICE);
 		final PhoneCallListener phoneListener = new PhoneCallListener(
@@ -164,7 +192,7 @@ public class MainActivity extends Activity {
 			Intent callIntent = new Intent(Intent.ACTION_CALL);
 			callIntent.setData(Uri.parse("tel:" + phoneNb));
 			startActivity(callIntent);
-			
+
 			if (autoCutoutTimeoutOffset > 0) {
 				autoCutoutTimer = new Timer();
 				TimerTask task = new TimerTask() {
@@ -181,7 +209,8 @@ public class MainActivity extends Activity {
 						});
 					}
 				};
-				autoCutoutTimer.schedule(task, autoCutoutTimeouts[autoCutoutTimeoutOffset] * 1000);
+				autoCutoutTimer.schedule(task,
+						autoCutoutTimeouts[autoCutoutTimeoutOffset] * 1000);
 			}
 		}
 	}
@@ -254,7 +283,8 @@ public class MainActivity extends Activity {
 
 				isPhoneCalling = true;
 
-				// Happens as soon as phone goes off te hook, doesn't wait until other end has answered.
+				// Happens as soon as phone goes off te hook, doesn't wait until
+				// other end has answered.
 				// hangup();
 			}
 
@@ -266,17 +296,17 @@ public class MainActivity extends Activity {
 				if (isPhoneCalling) {
 
 					// Restart activity
-//					Intent i = getBaseContext().getPackageManager()
-//							.getLaunchIntentForPackage(
-//									getBaseContext().getPackageName());
-//					i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//					startActivity(i);
+					Intent i = getBaseContext().getPackageManager()
+							.getLaunchIntentForPackage(
+									getBaseContext().getPackageName());
+					i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivity(i);
 
 					isPhoneCalling = false;
 				}
 			}
 		}
-		
+
 		void hangup() {
 			try {
 				// String serviceManagerName = "android.os.IServiceManager";
@@ -291,8 +321,6 @@ public class MainActivity extends Activity {
 				Class<?> serviceManagerNativeClass;
 				// Class<?> serviceManagerNativeStubClass;
 
-				// Method telephonyCall;
-				@SuppressWarnings("unused")
 				Method telephonyEndCall;
 				// Method telephonyAnswerCall;
 				// Method getDefault;
@@ -301,7 +329,6 @@ public class MainActivity extends Activity {
 				// Constructor[] serviceManagerConstructor;
 
 				// Method getService;
-				@SuppressWarnings("unused")
 				Object telephonyObject;
 				Object serviceManagerObject;
 

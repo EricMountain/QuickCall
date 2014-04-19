@@ -12,5 +12,11 @@ public interface QuickCallPreferences {
 	static final String PHONE_NB = "PHONE_NB";
 	
 	/** Time after which to cutout the call automatically (offset into the array of strings). */
-	static final String AUTO_CUTOUT_TIMEOUT_OFFSET = "AUTO_CUTOUT_TIMEOUT_OFFSET"; 
+	static final String AUTO_CUTOUT_TIMEOUT_OFFSET = "AUTO_CUTOUT_TIMEOUT_OFFSET";
+	
+	/** Time to wait between auto-launched calls. */
+	static final String AUTO_REDIAL_DELAY_MS = "AUTO_REDIAL_DELAY_MS";
+
+	/** Time last call was placed (as a long). */
+	static final String LAST_CALL_TIME = "LAST_CALL_TIME";
 }

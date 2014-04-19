@@ -4,7 +4,7 @@
     <string name="app_name">Appel Rapide</string>
     <string name="action_settings">Settings</string>
     <string name="make_call">Appeler</string>
-    <string name="phoneNumber">Tél:</string>
-    <string name="auto_call">Numérotation auto:</string>
-    
+    <string name="phoneNumber">Tél</string>
+    <string name="auto_call">Numérotation auto</string>
+    <string name="cutout_prompt">Durée d\'appel</string>
 </resources>

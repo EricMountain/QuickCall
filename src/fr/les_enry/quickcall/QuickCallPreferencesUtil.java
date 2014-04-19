@@ -1,5 +1,7 @@
 package fr.les_enry.quickcall;
 
+import java.util.Date;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -42,7 +44,28 @@ public class QuickCallPreferencesUtil implements QuickCallPreferences {
 		sharedPrefs.edit().putInt(AUTO_CUTOUT_TIMEOUT_OFFSET, autoCutoutOffset).apply();
 	}
 	
-//	boolean getCallInProgress() {
+	long getAutoRedialDelayMs() {
+		return sharedPrefs.getLong(AUTO_REDIAL_DELAY_MS, 5 * 60 * 1000);
+	}
+	
+	void atomicPutAutoRedialDelayMs(long autoRedialDelayMs) {
+		sharedPrefs.edit().putLong(AUTO_REDIAL_DELAY_MS, autoRedialDelayMs).apply();
+	}
+	
+	Date getLastCallTime() {
+		long lastCall = sharedPrefs.getLong(LAST_CALL_TIME, Long.MIN_VALUE);
+		
+		return lastCall == Long.MIN_VALUE ? null : new Date(lastCall);
+	}
+	
+	void atomicPutLastCallTime(Date lastCall) {
+		if (lastCall != null) {
+			long millis = lastCall.getTime();
+			sharedPrefs.edit().putLong(LAST_CALL_TIME, millis).apply();
+		}
+	}
+	
+	//	boolean getCallInProgress() {
 //		return sharedPrefs.getBoolean(CALL_IN_PROGRESS, false);
 //	}
 //	

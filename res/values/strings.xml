@@ -4,8 +4,8 @@
     <string name="app_name">Quick Call</string>
     <string name="action_settings">Settings</string>
     <string name="make_call">Call</string>
-    <string name="phoneNumber">Phone:</string>
-    <string name="auto_call">Auto-dial:</string>
+    <string name="phoneNumber">Phone</string>
+    <string name="auto_call">Auto-dial</string>
 
     <string-array name="auto_cutout_array">
         <item>Off</item>
@@ -17,5 +17,7 @@
         <item>40"</item>
         <item>50"</item>
     </string-array>
-    
+
+    <string name="cutout_prompt">Hangup delay</string>
+
 </resources>
